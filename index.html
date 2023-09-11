@@ -1,0 +1,140 @@
+<style>
+  #container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 90vh;
+  }
+
+  #chart-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* Change to column to stack chart and message */
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  canvas#myChart {
+    max-width: 800px;
+    width: 100%;
+    height: auto;
+  }
+
+  #chart-message {
+    text-align: center;
+    font-style: italic;
+    margin-top: 20px;
+  }
+
+  #chart-header {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  #chart-subheader {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+  }
+
+  #input-container {
+    flex: 1;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+</style>
+
+<div id="container">
+  <div id="input-container">
+    <div id="chart-header">
+      <h1>¿CÓMO ESTÁN ESTOS ASPECTOS DE TU VIDA?</h1>
+    </div>
+    <div id="chart-subheader">
+      <h2>Utiliza una escala del 1 al 10, donde 1 significa muy malo y 10 significa muy bueno.</h2>
+    </div>
+
+    <div>
+      <label for="corporalInput">Corporal:</label>
+      <input type="number" id="corporalInput" min="1" max="10" value="5">
+    </div>
+    <div>
+      <label for="emocionalInput">Emocional:</label>
+      <input type="number" id="emocionalInput" min="1" max="10" value="5">
+    </div>
+    <div>
+      <label for="mentalInput">Mental:</label>
+      <input type="number" id="mentalInput" min="1" max="10" value="5">
+    </div>
+    <div>
+      <label for="profesionalInput">Profesional:</label>
+      <input type="number" id="profesionalInput" min="1" max="10" value="5">
+    </div>
+    <div>
+      <label for="socialInput">Social:</label>
+      <input type="number" id="socialInput" min="1" max="10" value="5">
+    </div>
+    <div>
+      <button onclick="updateChart()">Update</button>
+    </div>
+  </div>
+
+  <div id="chart-container">
+    <canvas id="myChart"></canvas>
+    <div id="chart-message">
+      <p>Para guardar el gráfico, haz clic con el botón derecho, selecciona imprimir y luego guardar.</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let chart;
+
+  function updateChart() {
+    const corporalValue = parseInt(document.getElementById('corporalInput').value);
+    const emocionalValue = parseInt(document.getElementById('emocionalInput').value);
+    const mentalValue = parseInt(document.getElementById('mentalInput').value);
+    const profesionalValue = parseInt(document.getElementById('profesionalInput').value);
+    const socialValue = parseInt(document.getElementById('socialInput').value);
+
+    if (chart) {
+      chart.data.labels = ['Corporal', 'Emocional', 'Mental', 'Profesional', 'Social'];
+      chart.data.datasets[0].data = [corporalValue, emocionalValue, mentalValue, profesionalValue, socialValue];
+      chart.update();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('myChart');
+    chart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+        labels: ['Corporal', 'Emocional', 'Mental', 'Profesional', 'Social'],
+        datasets: [{
+          label: '# of Votes',
+          data: [5, 5, 5, 5, 5],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              stepSize: 1,
+              beginAtZero: true,
+              max: 10
+            }
+          }
+        }
+      }
+    });
+  });
+</script>
